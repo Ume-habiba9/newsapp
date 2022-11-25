@@ -1,14 +1,15 @@
-import newssuccess from "./reactredux/saga"
-import all from "redux-saga"
-export function*  mySaga(){
+import { fetchNews } from "./reactredux/saga"
+import { all } from "redux-saga/effects"
+export function* mySaga() {
 
-try {
+  try {
+
     yield all([
-      ...newssuccess
-     
+      ...fetchNews
+
     ]);
-  } catch (err) {
-    return new Error(err);
+  } catch {
+    console.log("")
   }
 
 }
