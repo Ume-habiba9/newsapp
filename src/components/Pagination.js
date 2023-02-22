@@ -1,24 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react'
 
-export const Pagination = (props) => {
-    let mypages = Math.floor(totalposts / postsperpage);
-    let totalposts;
-    const [currentpage, setcurrentpage] = useState(1)
-    const [postsperpage, setpostsperpage] = useState(21)
-    const Lastpostindex = currentpage * postsperpage;
-    const firstpostindex = Lastpostindex - postsperpage;
-
-    let pages = [];
-    for (let i = 1; i <= mypages; i++) {
+export const Pagination = ({totalNews,newsPerPage,setCurrentpage }) => {
+    let pages = []
+    for (let i = 1; i <=Math.ceil(totalNews/newsPerPage); i++) {
         pages.push(i)
     }
+
+
     return (
         <div>
-            <div>
-                <button className='prev'></button>
-                {pages}
-                <button className='next'></button>
-            </div>
+            {
+                pages.map((page, index) => {
+                    return <button onClick={()=>setCurrentpage(page)} className='bg-[#115e59] text-white font-medium py-2 px-4 m-2 outline-none rounded-3xl hover:bg-white hover:text-[#115e59] hover:outline-[#115e59]' key={index}>{page}</button>
+                })
+            }
         </div>
     )
 }

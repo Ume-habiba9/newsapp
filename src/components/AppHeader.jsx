@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
-// import { Pagination } from './Pagination';
+import { Pagination } from './Pagination';
 export const AppHeader = () => {
   const [searchText, setsearchText] = useState('');
   const [filteredNews, setfilteredNews] = useState([])
+  const [currentpage, setCurrentpage] = useState(1)
+  const [ArticlesPerPage, setArticlesPerPag] = useState(12)
+  const LastPageIndex = currentpage * ArticlesPerPage
+  const firstPageIndex = LastPageIndex - ArticlesPerPage
 
   const onLoad = () => {
     axios.get("https://newsapi.org/v2/everything?domains=techcrunch.com,thenextweb.com&apiKey=53f3b6c8465f4315a0ab59a229db3d02").then((response) => {
@@ -13,22 +17,23 @@ export const AppHeader = () => {
     })
 
   }
+
   useEffect(() => {
     onLoad()
   }, [])
-
+const currentnews=filteredNews.slice(firstPageIndex,LastPageIndex)
   const search = () => {
     axios.get(`https://newsapi.org/v2/everything?q=${searchText}&pageSize=90&apiKey=53f3b6c8465f4315a0ab59a229db3d02`).then((response) => {
       const showdata = (response.data.articles)
       setfilteredNews(showdata)
     });
+   
     setsearchText('')
   }
   function setsearch(e) {
     setsearchText(e.target.value);
 
   }
-
   const CategoryBusiness = () => {
     axios.get('https://newsapi.org/v2/everything?q=business&pageSize=90&apiKey=53f3b6c8465f4315a0ab59a229db3d02').then((response) => {
       const filtereddata = (response.data.articles)
@@ -74,10 +79,10 @@ export const AppHeader = () => {
   return (
     <div className=''>
       <div className="bg-[#115e59] flex flex-wrap py-7 mobile:py-3 justify-between align-center tablet:justify-center mobile-justify-center">
-        <h3 className=' flex justify-center text-white text-2xl font-bold mx-9 mobile:mx-[128px] px-9 py-3 italic font-serif mobile:text-center'>Buzz News</h3>
+        <h3 className='text-white text-2xl font-semibold mobile:mx-[128px] py-3 italic font-serif mobile:text-center'>Buzz News</h3>
         <div>
-          <input className="bg-white  font-medium px-8 py-3 mx-9 outline-none rounded-md" type='search' value={searchText} onChange={(e) => setsearch(e)} placeholder='Search Here'></input>
-          <button onClick={search} className='bg-white  font-medium px-4 py-2 ml-4 mr-9 outline-none rounded-md' type='submit'>Search</button>
+          <input className="bg-white font-medium px-8 py-2 my-3 mx-9 outline-none rounded-3xl" type='search' value={searchText}  onChange={(e) => setsearch(e)} placeholder='Search Here'></input>
+          <button onClick={search} className='bg-white font-medium px-5 py-2 mr-9 outline-none rounded-3xl' type='submit'>Search</button>
         </div>
       </div>
       <div className='CategoryTabs flex flex-row flex-wrap justify-evenly align-center'>
@@ -91,33 +96,32 @@ export const AppHeader = () => {
       </div>
       <div className='flex flex-wrap align-center justify-center'>
         {
-          filteredNews
-          && filteredNews
-            .map((filteredNews
+          currentnews
+          && currentnews
+            .map((currentnews
             ) => {
               return (
                 <div className='flex flex-wrap flex-row'>
-                  <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 mx-9 my-9 " key={filteredNews
+                  <div className="max-w-sm bg-white shadow-md dark:bg-gray-800 dark:border-gray-700 mx-7 my-9 " key={currentnews
                     .source.id}>
                     <a href="#">
-                      <img className="rounded-t-lg" src={filteredNews
-                        .urlToImage ? filteredNews
+                      <img className="rounded-t-lg" src={currentnews
+                        .urlToImage ? currentnews
                         .urlToImage : 'https://th.bing.com/th/id/OIP.ewDa2eI464u8oj34rL7XlgHaE7?pid=ImgDet&rs=1'} alt="" />
                     </a>
                     <div className="p-5">
                       <a href="#">
-                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{filteredNews
+                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{currentnews
                           .title}</h5>
                       </a>
-                      <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{filteredNews
-                        .description ? filteredNews
-                        .description : filteredNews
+                      <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{currentnews
+                        .description ? currentnews
+                        .description : currentnews
                         .content}</p>
-                      <a href={filteredNews
-                        .url} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-black">
+                      <a href={currentnews
+                        .url} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-black" target="blank">
                         Read more
                         <svg aria-hidden="true" className="w-4 h-4 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-
                       </a>
                     </div>
                   </div>
@@ -126,6 +130,7 @@ export const AppHeader = () => {
             }
             )
         }
+        <Pagination totalNews={filteredNews.length} newsPerPage={ArticlesPerPage} setCurrentpage={setCurrentpage}></Pagination>
       </div >
     </div >
   )
