@@ -5,11 +5,11 @@ import { GetNews, NewsRecieved } from "../redux/reactredux/action";
 import { NewsList } from './NewsList';
 import App from '../App';
 export const Home = () => {
-    const dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(GetNews())
-        dispatch(NewsRecieved())
-    }, [])
+    // const dispatch = useDispatch()
+    // useEffect(() => {
+    //     dispatch(GetNews())
+    //     dispatch(NewsRecieved())
+    // }, [])
     return (
         <div className='Home'>
             <div className='w-[100%]'>
