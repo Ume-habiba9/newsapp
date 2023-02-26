@@ -79,7 +79,7 @@ const currentnews=filteredNews.slice(firstPageIndex,LastPageIndex)
   return (
     <div className=''>
       <div className="bg-[#115e59] flex flex-wrap py-7 mobile:py-3 justify-between align-center tablet:justify-center mobile-justify-center">
-        <h3 className='text-white text-2xl font-semibold mobile:mx-[128px] py-3 italic font-serif mobile:text-center'>Buzz News</h3>
+        <h3 className='text-white text-2xl font-semibold mobile:mx-[128px] py-3 italic font-serif mobile:text-center'>News Hub</h3>
         <div>
           <input className="bg-white font-medium px-8 py-2 my-3 mx-9 outline-none rounded-3xl" type='search' value={searchText}  onChange={(e) => setsearch(e)} placeholder='Search Here'></input>
           <button onClick={search} className='bg-white font-medium px-5 py-2 mr-9 outline-none rounded-3xl' type='submit'>Search</button>
@@ -104,13 +104,13 @@ const currentnews=filteredNews.slice(firstPageIndex,LastPageIndex)
                 <div className='flex flex-wrap flex-row'>
                   <div className="max-w-sm bg-white shadow-md dark:bg-gray-800 dark:border-gray-700 mx-7 my-9 " key={currentnews
                     .source.id}>
-                    <a href="#">
+                    <a href={currentnews.url}>
                       <img className="rounded-t-lg" src={currentnews
                         .urlToImage ? currentnews
                         .urlToImage : 'https://th.bing.com/th/id/OIP.ewDa2eI464u8oj34rL7XlgHaE7?pid=ImgDet&rs=1'} alt="" />
                     </a>
                     <div className="p-5">
-                      <a href="#">
+                      <a href={currentnews.url}>
                         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{currentnews
                           .title}</h5>
                       </a>
